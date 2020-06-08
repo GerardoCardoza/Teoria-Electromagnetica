@@ -1,0 +1,123 @@
+
+%Proyecto de teoria Electromagnetica
+%Parte 2
+
+clear   % elimina las variables del Workspace
+clc     % limpia la ventana de comandos
+syms Q O p;
+
+x=p*sin(Q)*cos(O);
+y=p*sin(Q)*sin(O);
+z=p*sin(Q)*cos(O)+p*sin(Q)*sin(O);
+surf(p,Q,O);
+
+f = @(x,y,z) 6*cos.^2*(x)+ 3*sin(y).^2 - z.^2,[-2*pi 2*pi];    % f(x,y,z) = 0
+fimplicit3(f)
+
+syms x V;
+figure (5);
+V=0;
+for n=1:2:5
+    c=(2*n+1)*int(legendreP(n,x),0,3.1416);
+    V=V+c*legendreP(n,x);
+end
+fplot(V,[-2,2])
+set(gca,'XTick',-1:0.4:1)
+set(gca,'XTickLabel',{'\pi', '3\pi/4','\pi/2','\pi/4', '0'})
+set(gca, 'XDir','reverse')
+
+grid on
+xlabel('\theta')
+ylabel('V/V_0')
+title('Potencial para r=R')
+
+syms x V;
+figure (5);
+V=0;
+for n=1:2:5
+    c=(2*n+1)*int(legendreP(n,x),0,3.1416);
+    V=V+c*legendreP(n,x);
+end
+fplot(V,[-2,2])
+set(gca,'XTick',-1:0.4:1)
+set(gca,'XTickLabel',{'\pi', '3\pi/4','\pi/2','\pi/4', '0'})
+set(gca, 'XDir','reverse')
+
+grid on
+xlabel('\theta')
+ylabel('V/V_0')
+title('Potencial para r=a')
+
+
+%% Parte #1
+
+clear   % elimina las variables del Workspace
+clc     % limpia la ventana de comandos
+
+a = 0; b = 2*pi; N = 500;
+t = linspace(a,b,N);
+f(t) = -3/2 *cos(3*t);
+
+f(q) = -6*(cos(q)).^2+3*cos(q);
+
+figure(2); clf;
+xt = @(t) 3/2*sin(3*t);
+yt = @(t) 3/2*cos(3*t);
+zt = @(t) -6*(cos(t)).^2+3*cos(t);
+fplot3(xt,yt,zt,'Linewidth',16);  
+
+
+[X,Y] = meshgrid(1:0.25:10,1:0.25:20);  % "malla" de puntos a ser evaluados abajo
+Z = 3/2*sin(3*X) + 3/2*cos(3*Y);    % Imágenes: Z = f(x,y)
+figure(6); clf;
+meshc(X,Y,Z);
+
+
+syms x y;
+a=2; %dimensiones
+b=1;
+N=100;
+f(z) = laplace_potencial_2(x,y, N, a, b)
+    z=0;
+    for n=0:N
+        C=8*a*(-1)^n/(((2*n+1)*pi)^2*sinh((2*n+1)*pi*b/(2*a)));
+        z=z+C*sinh((2*n+1)*pi*y/(2*a)).*sin((2*n+1)*pi*x/(2*a));
+    end
+
+f=@(x,y) laplace_potencial_2(x,y, N, a, b);
+fcontour(f,[0,a,0,b], 'fill','on')
+colorbar
+xlabel('x')
+ylabel('y')
+title('V(x,y)')
+
+a=2; %dimensiones
+b=1;
+[x,y] = meshgrid(0:0.1:a, 0:0.1:b);
+N=100;
+z=laplace_potencial_2(x,y, N, a, b);
+mesh(x,y,z)
+xlabel('x')
+ylabel('y')
+zlabel('V(x,y)')
+title('Potencial')
+view(47,32)
+
+
+%% Parte #3
+
+clear   % elimina las variables del Workspace
+clc     % limpia la ventana de comandos
+
+figure(3);
+a=0;
+b=0;
+
+clearvars;
+x=linspace(-2,2,11);
+y=x;
+[X,Y]= meshgrid(x,y);
+Z=   X.^2 + Y.^2 ;
+surf(X,Y,Z);
+
+
